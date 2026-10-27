@@ -27,7 +27,7 @@ app.use((req, res, next) => {
         console.log({
             method: req.method,
             url: req.originalUrl,
-            status: req.statusCode,
+            status: res.statusCode,
             duration: `${duration} ms`
         })
     })
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 })
 
 // Response Envelope
-function succesResponse(res, message, data, status = 200){
+function successResponse(res, message, data, status = 200){
     return res.status(status).json({
         success: true, message, data, error: null,
     })
@@ -118,7 +118,7 @@ app.post('/biodata', validateBody(biodataSchema), async (req, res) => {
 })
 
 app.put(
-    "biodata/:id", 
+    "/biodata/:id", 
     validateParams(idSchema),
     validateBody(
         biodataSchema
@@ -141,7 +141,7 @@ app.put(
     },
 );
 
-app.delete('biodata/:id', validateParams(idSchema), async (req, res) => {
+app.delete('/biodata/:id', validateParams(idSchema), async (req, res) => {
     const {id} = req.params
     const result = await pool.query(
         `DELETE FROM biodata WHERE id=$1 RETURNING *`,
